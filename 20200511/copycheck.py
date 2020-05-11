@@ -3,7 +3,7 @@ import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from CopyCheck import copy_checker_by_filename
+from CopyChecker import copy_checker_by_filename
 
 def main():
     df_sim1 = copy_checker_by_filename("HarmonicMean",test=True)
