@@ -2,4 +2,6 @@ __pycache__
 *.ipynb_checkpoints
 .DS_Store
 submit
-
+copycheck_*.csv
+score*.csv
+data*/

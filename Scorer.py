@@ -22,7 +22,7 @@ class Scorer:
         self.test_dir = path + "/submit"
         self.score_dict = {}
         
-    def test_stdout(self, filename, convert=convert, testdata = None, max_score=1):
+    def test_stdout(self, filename, convert=convert, testdata = None, max_score=1, stdin_file=None):
         """"
         課題が標準出力のときに使う関数
         
@@ -40,12 +40,23 @@ class Scorer:
         for test_file in test_file_list:
             ID = test_file.split("/")[-1][:8]
             try:
-                proc = subprocess.Popen(
-                    ['python', test_file], 
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE
-                )
-                out, err = proc.communicate()
+                if stdin_file is None:
+                    proc = subprocess.Popen(
+                        ['python', test_file], 
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE
+                    )
+                    out, err = proc.communicate()
+                else:
+                    proc1 = subprocess.Popen(["python",stdin_file],stdout=subprocess.PIPE)
+                    proc2 = subprocess.Popen(
+                        ["python", test_file],
+                        stdin = proc1.stdout,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE
+                    )
+                    proc1.stdout.close()
+                    out, err = proc2.communicate()
                 out_conv = convert(out)
                 err = err.decode("utf-8")
             except:
